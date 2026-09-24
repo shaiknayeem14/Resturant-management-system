@@ -1,7 +1,9 @@
-const API_BASE_URL = '/api';
+const rawApiBase = import.meta.env.VITE_API_URL || '/api';
+const API_BASE_URL = rawApiBase.endsWith('/') ? rawApiBase.slice(0, -1) : rawApiBase;
 
 export const request = async (endpoint, options = {}) => {
   const token = localStorage.getItem('bistro_token');
+  const normalizedEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
 
   const headers = {
     'Content-Type': 'application/json',
@@ -10,7 +12,7 @@ export const request = async (endpoint, options = {}) => {
   };
 
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const response = await fetch(`${API_BASE_URL}${normalizedEndpoint}`, {
       ...options,
       headers,
     });
