@@ -31,20 +31,30 @@ export const isJwtExpired = (token) => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
   const [token, setToken] = useState(() => localStorage.getItem('bistro_token'));
+  const [user, setUser] = useState(() => {
+    const savedToken = localStorage.getItem('bistro_token');
+    if (savedToken && !isJwtExpired(savedToken)) {
+      try {
+        const cachedUser = localStorage.getItem('bistro_user');
+        if (cachedUser) return JSON.parse(cachedUser);
+      } catch (e) {}
+    }
+    return null;
+  });
   const [loading, setLoading] = useState(true);
 
   // Validate and retrieve current user session
   const fetchCurrentUser = useCallback(async () => {
-    if (!token) {
+    const currentToken = localStorage.getItem('bistro_token') || token;
+    if (!currentToken) {
       setUser(null);
       setLoading(false);
       return;
     }
 
     // Check if stored JWT token is already expired
-    if (isJwtExpired(token)) {
+    if (isJwtExpired(currentToken)) {
       console.warn('JWT token has expired, logging out.');
       logout();
       setLoading(false);
@@ -55,12 +65,22 @@ export const AuthProvider = ({ children }) => {
       const data = await api.getMe();
       if (data.success && data.user) {
         setUser(data.user);
+        localStorage.setItem('bistro_user', JSON.stringify(data.user));
       } else {
         logout();
       }
     } catch (err) {
       console.warn('Failed to restore JWT session:', err.message);
-      logout();
+      // Only clear credentials if backend explicitly reports invalid token / unauthorized
+      if (
+        err.message &&
+        (err.message.includes('401') ||
+          err.message.includes('denied') ||
+          err.message.includes('Invalid') ||
+          err.message.includes('expired'))
+      ) {
+        logout();
+      }
     } finally {
       setLoading(false);
     }
@@ -75,6 +95,7 @@ export const AuthProvider = ({ children }) => {
     const data = await api.login({ email, password });
     if (data.success && data.token) {
       localStorage.setItem('bistro_token', data.token);
+      localStorage.setItem('bistro_user', JSON.stringify(data.user));
       setToken(data.token);
       setUser(data.user);
       return data.user;
@@ -87,6 +108,7 @@ export const AuthProvider = ({ children }) => {
     const data = await api.register(userData);
     if (data.success && data.token) {
       localStorage.setItem('bistro_token', data.token);
+      localStorage.setItem('bistro_user', JSON.stringify(data.user));
       setToken(data.token);
       setUser(data.user);
       return data.user;
@@ -97,6 +119,7 @@ export const AuthProvider = ({ children }) => {
   // Logout action
   const logout = () => {
     localStorage.removeItem('bistro_token');
+    localStorage.removeItem('bistro_user');
     setToken(null);
     setUser(null);
   };
@@ -105,7 +128,11 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (profileData) => {
     const data = await api.updateProfile(profileData);
     if (data.success && data.user) {
-      setUser((prev) => ({ ...prev, ...data.user }));
+      setUser((prev) => {
+        const updated = { ...prev, ...data.user };
+        localStorage.setItem('bistro_user', JSON.stringify(updated));
+        return updated;
+      });
       return data.user;
     }
     throw new Error(data.message || 'Failed to update profile');

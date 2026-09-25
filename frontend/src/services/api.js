@@ -1,5 +1,25 @@
-const rawApiBase = import.meta.env.VITE_API_URL || '/api';
-const API_BASE_URL = rawApiBase.endsWith('/') ? rawApiBase.slice(0, -1) : rawApiBase;
+// Determine API base URL dynamically for local dev, custom env, and Vercel production
+const getApiBaseUrl = () => {
+  // If explicitly configured via Vite env
+  const envApiUrl = import.meta.env.VITE_API_URL;
+  if (envApiUrl && envApiUrl.trim() !== '') {
+    const trimmed = envApiUrl.trim();
+    return trimmed.endsWith('/') ? trimmed.slice(0, -1) : trimmed;
+  }
+
+  // When running in browser on localhost/127.0.0.1, use relative /api (proxied by Vite)
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return '/api';
+    }
+  }
+
+  // Deployed production fallback to Render API
+  return 'https://resturant-management-system-cy8j.onrender.com/api';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const request = async (endpoint, options = {}) => {
   const token = localStorage.getItem('bistro_token');
@@ -17,7 +37,19 @@ export const request = async (endpoint, options = {}) => {
       headers,
     });
 
-    const data = await response.json().catch(() => ({}));
+    const contentType = response.headers.get('content-type');
+    let data;
+
+    if (contentType && contentType.includes('application/json')) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = { message: text || `HTTP ${response.status}: ${response.statusText}` };
+      }
+    }
 
     if (!response.ok) {
       throw new Error(data.message || `Request failed with status ${response.status}`);
