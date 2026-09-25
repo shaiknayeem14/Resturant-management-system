@@ -160,7 +160,7 @@ export const Cart = () => {
                   </div>
                   <h3 style={{ fontSize: '1.1rem', color: '#fff', marginBottom: '4px' }}>{item.name}</h3>
                   <div style={{ fontSize: '0.95rem', color: 'var(--primary)', fontWeight: 700 }}>
-                    ${item.price.toFixed(2)}
+                    ₹{item.price.toFixed(2)}
                   </div>
                   {item.instructions && (
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic', marginTop: '4px' }}>
@@ -199,7 +199,7 @@ export const Cart = () => {
                   </div>
 
                   <div style={{ width: '80px', textAlign: 'right', fontWeight: 700, color: '#fff', fontSize: '1.1rem' }}>
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ₹{(item.price * item.quantity).toFixed(2)}
                   </div>
 
                   <button
@@ -236,22 +236,22 @@ export const Cart = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.95rem', marginBottom: '1.5rem' }}>
             <div className="flex-between" style={{ color: 'var(--text-secondary)' }}>
               <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>₹{subtotal.toFixed(2)}</span>
             </div>
             <div className="flex-between" style={{ color: 'var(--text-secondary)' }}>
               <span>Sales Tax (8%)</span>
-              <span>${tax.toFixed(2)}</span>
+              <span>₹{tax.toFixed(2)}</span>
             </div>
             {orderType === 'delivery' && (
               <div className="flex-between" style={{ color: 'var(--text-secondary)' }}>
                 <span>Delivery Fee</span>
-                <span>{deliveryFee === 0 ? <span style={{ color: '#34d399' }}>Free (Orders &gt; $50)</span> : `$${deliveryFee.toFixed(2)}`}</span>
+                <span>{deliveryFee === 0 ? <span style={{ color: '#34d399' }}>Free (Orders &gt; ₹500)</span> : `₹${deliveryFee.toFixed(2)}`}</span>
               </div>
             )}
             {discountAmount > 0 && (
               <div className="flex-between" style={{ color: '#34d399', fontWeight: 600 }}>
                 <span>Promo Discount ({coupon?.code})</span>
-                <span>-${discountAmount.toFixed(2)}</span>
+                <span>-₹{discountAmount.toFixed(2)}</span>
               </div>
             )}
             <div
@@ -265,7 +265,7 @@ export const Cart = () => {
               }}
             >
               <span>Total Payable</span>
-              <span style={{ color: 'var(--primary)' }}>${total.toFixed(2)}</span>
+              <span style={{ color: 'var(--primary)' }}>₹{total.toFixed(2)}</span>
             </div>
           </div>
 

@@ -105,7 +105,7 @@ export const Navbar = () => {
                 lineHeight: 1.1,
               }}
             >
-              L'AURA
+              THE SPICEY HOUSE
             </span>
             <span
               style={{

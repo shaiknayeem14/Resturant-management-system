@@ -359,7 +359,7 @@ export const OrderTracking = () => {
                       {item.quantity}x {item.name}
                     </span>
                     <span style={{ color: '#fff', fontWeight: 600 }}>
-                      ${(item.price * item.quantity).toFixed(2)}
+                      ₹{(item.price * item.quantity).toFixed(2)}
                     </span>
                   </div>
                 ))}
@@ -369,21 +369,21 @@ export const OrderTracking = () => {
               <div style={{ paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)', display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.85rem' }}>
                 <div className="flex-between" style={{ color: 'var(--text-secondary)' }}>
                   <span>Subtotal</span>
-                  <span>${order.subtotal?.toFixed(2)}</span>
+                  <span>₹{order.subtotal?.toFixed(2)}</span>
                 </div>
                 <div className="flex-between" style={{ color: 'var(--text-secondary)' }}>
                   <span>Tax</span>
-                  <span>${order.tax?.toFixed(2)}</span>
+                  <span>₹{order.tax?.toFixed(2)}</span>
                 </div>
                 {order.deliveryFee > 0 && (
                   <div className="flex-between" style={{ color: 'var(--text-secondary)' }}>
                     <span>Delivery Fee</span>
-                    <span>${order.deliveryFee?.toFixed(2)}</span>
+                    <span>₹{order.deliveryFee?.toFixed(2)}</span>
                   </div>
                 )}
                 <div className="flex-between" style={{ color: '#fff', fontSize: '1.1rem', fontWeight: 700, paddingTop: '0.5rem', marginTop: '0.25rem', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
                   <span>Total Amount</span>
-                  <span style={{ color: 'var(--primary)' }}>${order.totalAmount?.toFixed(2)}</span>
+                  <span style={{ color: 'var(--primary)' }}>₹{order.totalAmount?.toFixed(2)}</span>
                 </div>
               </div>
             </div>

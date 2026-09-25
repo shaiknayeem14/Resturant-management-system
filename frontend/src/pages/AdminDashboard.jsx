@@ -326,10 +326,10 @@ export const AdminDashboard = () => {
                 <DollarSign size={20} color="var(--primary)" />
               </div>
               <div style={{ fontSize: '1.9rem', fontWeight: 700, color: 'var(--primary)', fontFamily: 'var(--font-serif)' }}>
-                ${analytics.totalRevenue?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                ₹{analytics.totalRevenue?.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
               </div>
               <div style={{ fontSize: '0.78rem', color: '#34d399', marginTop: '4px' }}>
-                Today's: ${analytics.todayRevenue?.toFixed(2)}
+                Today's: ₹{analytics.todayRevenue?.toFixed(2)}
               </div>
             </div>
 
@@ -403,7 +403,7 @@ export const AdminDashboard = () => {
                       <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{ord.customerInfo?.name || 'Customer'}</div>
                     </div>
                     <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontWeight: 700, color: 'var(--primary)' }}>${ord.totalAmount?.toFixed(2)}</div>
+                      <div style={{ fontWeight: 700, color: 'var(--primary)' }}>₹{ord.totalAmount?.toFixed(2)}</div>
                       <StatusBadge status={ord.status} type="order" />
                     </div>
                   </div>
@@ -480,7 +480,7 @@ export const AdminDashboard = () => {
                         </div>
                       </td>
                       <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{food.categoryName || food.category?.name}</td>
-                      <td style={{ padding: '12px', color: 'var(--primary)', fontWeight: 700 }}>${food.price.toFixed(2)}</td>
+                      <td style={{ padding: '12px', color: 'var(--primary)', fontWeight: 700 }}>₹{food.price.toFixed(2)}</td>
                       <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>{food.prepTime} mins</td>
                       <td style={{ padding: '12px' }}>
                         <span className={`badge ${food.isAvailable ? 'badge-emerald' : 'badge-rose'}`}>
@@ -589,14 +589,14 @@ export const AdminDashboard = () => {
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '1rem' }}>
                     {ord.items?.map((it, idx) => (
                       <span key={idx} style={{ background: 'rgba(255,255,255,0.05)', padding: '4px 10px', borderRadius: '6px', fontSize: '0.82rem', color: '#fff' }}>
-                        {it.quantity}x {it.name} (${(it.price * it.quantity).toFixed(2)})
+                        {it.quantity}x {it.name} (₹{(it.price * it.quantity).toFixed(2)})
                       </span>
                     ))}
                   </div>
 
                   <div className="flex-between" style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
                     <span>Payment: {ord.paymentMethod?.toUpperCase()} ({ord.paymentStatus})</span>
-                    <span style={{ fontSize: '1.15rem', fontWeight: 700, color: '#fff' }}>Total: ${ord.totalAmount?.toFixed(2)}</span>
+                    <span style={{ fontSize: '1.15rem', fontWeight: 700, color: '#fff' }}>Total: ₹{ord.totalAmount?.toFixed(2)}</span>
                   </div>
                 </div>
               ))}
@@ -791,7 +791,7 @@ export const AdminDashboard = () => {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label className="form-label">Price ($) *</label>
+                  <label className="form-label">Price (₹ INR) *</label>
                   <input
                     type="number"
                     step="0.01"

@@ -11,13 +11,15 @@ import {
   ShieldCheck, 
   Clock, 
   CheckCircle,
-  ArrowLeft
+  ArrowLeft,
+  CheckCircle2
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { api } from '../services/api';
+import { TearTicket } from '../components/TearTicket';
 
 export const Checkout = () => {
   const {
@@ -42,9 +44,9 @@ export const Checkout = () => {
 
   // Address
   const [street, setStreet] = useState(user?.address?.street || '');
-  const [city, setCity] = useState(user?.address?.city || 'San Francisco');
-  const [state, setState] = useState(user?.address?.state || 'CA');
-  const [zipCode, setZipCode] = useState(user?.address?.zipCode || '94108');
+  const [city, setCity] = useState(user?.address?.city || 'Mumbai');
+  const [state, setState] = useState(user?.address?.state || 'MH');
+  const [zipCode, setZipCode] = useState(user?.address?.zipCode || '400001');
   const [tableNumber, setTableNumber] = useState('T-03');
   const [specialNotes, setSpecialNotes] = useState('');
 
@@ -55,6 +57,38 @@ export const Checkout = () => {
   const [cardCvc, setCardCvc] = useState('888');
 
   const [submitting, setSubmitting] = useState(false);
+  const [completedOrder, setCompletedOrder] = useState(null);
+
+  if (completedOrder) {
+    return (
+      <div className="section-padding container text-center" style={{ minHeight: '80vh', maxWidth: '700px' }}>
+        <div style={{ marginBottom: '1.5rem' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(52, 211, 153, 0.1)', color: '#34d399', marginBottom: '1rem' }}>
+            <CheckCircle2 size={36} />
+          </div>
+          <span className="badge badge-gold" style={{ display: 'inline-block', marginBottom: '0.5rem' }}>Payment Authorized</span>
+          <h1 style={{ fontSize: '2.4rem', color: '#fff' }}>Order Successfully Placed!</h1>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
+            Your official receipt ticket is generated below. Tear the ticket stub to proceed to live tracking.
+          </p>
+        </div>
+
+        <TearTicket
+          order={completedOrder}
+          onTearComplete={() => navigate(`/track-order?id=${completedOrder._id || completedOrder.orderNumber}`)}
+        />
+
+        <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+          <button
+            onClick={() => navigate(`/track-order?id=${completedOrder._id || completedOrder.orderNumber}`)}
+            className="btn btn-primary btn-lg"
+          >
+            Go to Live Order Tracking
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
@@ -121,9 +155,14 @@ export const Checkout = () => {
 
         success('Order placed successfully! Preparing your culinary experience.');
         clearCart();
-        navigate(`/track-order?id=${res.order._id || res.order.orderNumber}`);
+        setCompletedOrder(res.order);
       }
     } catch (err) {
+      if (err.status === 401 || (err.message && (err.message.includes('no longer exists') || err.message.includes('token') || err.message.includes('Access denied')))) {
+        error('Your login session has expired. Please sign in to place your order.');
+        navigate('/login', { state: { from: { pathname: '/checkout' } } });
+        return;
+      }
       error(err.message || 'Failed to place order. Please check your details.');
     } finally {
       setSubmitting(false);
@@ -424,7 +463,7 @@ export const Checkout = () => {
                       {it.quantity}x {it.name}
                     </span>
                     <span style={{ fontWeight: 600, color: '#fff' }}>
-                      ${(it.price * it.quantity).toFixed(2)}
+                      ₹{(it.price * it.quantity).toFixed(2)}
                     </span>
                   </div>
                 ))}
@@ -434,22 +473,22 @@ export const Checkout = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.9rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-subtle)' }}>
                 <div className="flex-between" style={{ color: 'var(--text-secondary)' }}>
                   <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
+                  <span>₹{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex-between" style={{ color: 'var(--text-secondary)' }}>
                   <span>Tax (8%)</span>
-                  <span>${tax.toFixed(2)}</span>
+                  <span>₹{tax.toFixed(2)}</span>
                 </div>
                 {orderType === 'delivery' && (
                   <div className="flex-between" style={{ color: 'var(--text-secondary)' }}>
                     <span>Delivery Fee</span>
-                    <span>{deliveryFee === 0 ? <span style={{ color: '#34d399' }}>Free</span> : `$${deliveryFee.toFixed(2)}`}</span>
+                    <span>{deliveryFee === 0 ? <span style={{ color: '#34d399' }}>Free</span> : `₹${deliveryFee.toFixed(2)}`}</span>
                   </div>
                 )}
                 {discountAmount > 0 && (
                   <div className="flex-between" style={{ color: '#34d399', fontWeight: 600 }}>
                     <span>Discount</span>
-                    <span>-${discountAmount.toFixed(2)}</span>
+                    <span>-₹{discountAmount.toFixed(2)}</span>
                   </div>
                 )}
                 <div
@@ -464,7 +503,7 @@ export const Checkout = () => {
                   }}
                 >
                   <span>Grand Total</span>
-                  <span style={{ color: 'var(--primary)' }}>${total.toFixed(2)}</span>
+                  <span style={{ color: 'var(--primary)' }}>₹{total.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -475,7 +514,7 @@ export const Checkout = () => {
                 className="btn btn-primary btn-lg"
                 style={{ width: '100%', marginTop: '1.5rem' }}
               >
-                {submitting ? 'Placing Order...' : `Authorize & Place Order • $${total.toFixed(2)}`}
+                {submitting ? 'Placing Order...' : `Authorize & Place Order • ₹${total.toFixed(2)}`}
               </button>
             </div>
           </div>

@@ -192,7 +192,7 @@ export const FoodCard = ({ food, onSelect }) => {
                 color: 'var(--primary)',
               }}
             >
-              ${food.price.toFixed(2)}
+              ₹{food.price.toFixed(2)}
             </div>
           </div>
 

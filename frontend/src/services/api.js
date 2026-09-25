@@ -52,7 +52,19 @@ export const request = async (endpoint, options = {}) => {
     }
 
     if (!response.ok) {
-      throw new Error(data.message || `Request failed with status ${response.status}`);
+      const err = new Error(data.message || `Request failed with status ${response.status}`);
+      err.status = response.status;
+      err.data = data;
+
+      if (response.status === 401 && !endpoint.includes('/auth/login') && !endpoint.includes('/auth/register')) {
+        localStorage.removeItem('bistro_token');
+        localStorage.removeItem('bistro_user');
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('auth:unauthorized', { detail: { message: data.message } }));
+        }
+      }
+
+      throw err;
     }
 
     return data;

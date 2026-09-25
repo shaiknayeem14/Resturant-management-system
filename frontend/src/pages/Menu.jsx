@@ -13,6 +13,7 @@ import {
 import { api } from '../services/api';
 import { FoodCard } from '../components/FoodCard';
 import { FoodModal } from '../components/FoodModal';
+import { MagicBento } from '../components/MagicBento';
 
 export const Menu = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -98,11 +99,12 @@ export const Menu = () => {
     <div className="section-padding" style={{ minHeight: '80vh' }}>
       <div className="container">
         {/* Header Title */}
-        <div className="text-center" style={{ maxWidth: '650px', margin: '0 auto 2.5rem auto' }}>
-          <span className="badge badge-gold" style={{ marginBottom: '0.5rem' }}>Haute Gastronomy</span>
-          <h1 style={{ fontSize: '2.8rem', marginBottom: '0.75rem' }}>Our Artisanal Menu</h1>
-          <p style={{ color: 'var(--text-secondary)' }}>
-            Each dish is passionately prepared with fresh, premium seasonal produce, artisanal heritage, and contemporary culinary artistry.
+        <div className="text-center" style={{ maxWidth: '750px', margin: '0 auto 2.5rem auto' }}>
+          <span className="badge badge-gold" style={{ marginBottom: '0.75rem' }}>Haute Gastronomy</span>
+          <h1 style={{ fontSize: '2.8rem', color: '#fff', marginBottom: '0.5rem', fontFamily: 'var(--font-serif)', fontWeight: 800 }}>The Spicey House</h1>
+          <p style={{ fontSize: '1.2rem', color: 'var(--primary-gold)', fontWeight: 600, marginBottom: '0.5rem' }}>Artisanal Menu</p>
+          <p style={{ color: 'var(--text-secondary)', marginTop: '0.5rem' }}>
+            Each dish is passionately prepared with fresh, premium seasonal produce, heritage spices, and contemporary culinary artistry.
           </p>
         </div>
 
@@ -142,7 +144,7 @@ export const Menu = () => {
                 id="food-search-input"
                 type="text"
                 className="form-control"
-                placeholder="Search by dish name, truffle, burrata, steak, pasta..."
+                placeholder="Search by dish name, truffle, curry, biryani, steak, tikka..."
                 style={{ paddingLeft: '40px' }}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -299,15 +301,7 @@ export const Menu = () => {
             </button>
           </div>
         ) : (
-          <div className="grid-responsive">
-            {foods.map((food) => (
-              <FoodCard
-                key={food._id}
-                food={food}
-                onSelect={(item) => setSelectedFood(item)}
-              />
-            ))}
-          </div>
+          <MagicBento foods={foods} onSelectFood={(item) => setSelectedFood(item)} />
         )}
       </div>
 

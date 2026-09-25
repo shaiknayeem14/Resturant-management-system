@@ -17,6 +17,8 @@ import {
 import { api } from '../services/api';
 import { FoodCard } from '../components/FoodCard';
 import { FoodModal } from '../components/FoodModal';
+import { DriftWall } from '../components/DriftWall';
+import { MagicBento } from '../components/MagicBento';
 
 export const Home = () => {
   const [featuredFoods, setFeaturedFoods] = useState([]);
@@ -90,26 +92,44 @@ export const Home = () => {
             >
               <Sparkles size={16} color="var(--primary)" />
               <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-gold)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
-                Exquisite Fine Dining & Artisan Gastronomy
+                Where Culinary Art Meets Timeless Elegance
               </span>
+            </div>
+
+            {/* Restaurant Name */}
+            <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--primary-gold)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.5rem', fontFamily: 'var(--font-serif)' }}>
+              The Spicey House
             </div>
 
             {/* Main Headline */}
             <h1
               style={{
-                fontSize: 'clamp(2.5rem, 5vw, 4.2rem)',
-                lineHeight: 1.1,
-                marginBottom: '1.5rem',
+                fontSize: 'clamp(2.5rem, 5vw, 4rem)',
+                lineHeight: 1.15,
+                marginBottom: '1.25rem',
                 color: '#fff',
+                fontWeight: 800,
+                fontFamily: 'var(--font-serif)',
               }}
             >
-              Where Every Bite is a <span className="gold-text">Culinary Symphony</span>
+              A Symphony of Flavours
             </h1>
 
             {/* Subtitle */}
             <p
               style={{
-                fontSize: '1.15rem',
+                fontSize: '1.3rem',
+                color: 'var(--primary-gold)',
+                lineHeight: 1.5,
+                fontWeight: 600,
+                marginBottom: '1rem',
+              }}
+            >
+              Where Every Bite Tells a Delicious Story
+            </p>
+            <p
+              style={{
+                fontSize: '1.05rem',
                 color: 'var(--text-secondary)',
                 lineHeight: 1.7,
                 marginBottom: '2.5rem',
@@ -163,6 +183,11 @@ export const Home = () => {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ================= DRIFT WALL DISH SHOWCASE ================= */}
+      <section style={{ backgroundColor: '#090d16', borderTop: '1px solid var(--border-gold)', borderBottom: '1px solid var(--border-gold)' }}>
+        <DriftWall foods={featuredFoods} onSelectFood={(item) => setSelectedFood(item)} />
       </section>
 
       {/* ================= CATEGORY SHOWCASE ================= */}
@@ -249,15 +274,10 @@ export const Home = () => {
           {loading ? (
             <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--primary)' }}>Loading signature dishes...</div>
           ) : (
-            <div className="grid-responsive">
-              {featuredFoods.map((food) => (
-                <FoodCard
-                  key={food._id}
-                  food={food}
-                  onSelect={(item) => setSelectedFood(item)}
-                />
-              ))}
-            </div>
+            <MagicBento
+              foods={featuredFoods}
+              onSelectFood={(item) => setSelectedFood(item)}
+            />
           )}
         </div>
       </section>

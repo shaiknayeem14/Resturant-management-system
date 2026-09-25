@@ -71,16 +71,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (err) {
       console.warn('Failed to restore JWT session:', err.message);
-      // Only clear credentials if backend explicitly reports invalid token / unauthorized
-      if (
-        err.message &&
-        (err.message.includes('401') ||
-          err.message.includes('denied') ||
-          err.message.includes('Invalid') ||
-          err.message.includes('expired'))
-      ) {
-        logout();
-      }
+      logout();
     } finally {
       setLoading(false);
     }
@@ -89,6 +80,15 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     fetchCurrentUser();
   }, [fetchCurrentUser]);
+
+  useEffect(() => {
+    const handleUnauthorized = (e) => {
+      console.warn('Unauthorized event received, logging out user:', e.detail?.message);
+      logout();
+    };
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+  }, []);
 
   // Login action
   const login = async (email, password) => {

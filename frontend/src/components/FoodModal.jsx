@@ -90,7 +90,7 @@ export const FoodModal = ({ food, onClose }) => {
                 color: 'var(--primary)',
               }}
             >
-              ${food.price.toFixed(2)}
+              ₹{food.price.toFixed(2)}
             </div>
           </div>
         </div>
@@ -238,7 +238,7 @@ export const FoodModal = ({ food, onClose }) => {
               style={{ flex: 1, height: '44px' }}
             >
               <Plus size={18} />
-              <span>Add to Order • ${totalPrice}</span>
+              <span>Add to Order • ₹{totalPrice}</span>
             </button>
           </div>
         </div>

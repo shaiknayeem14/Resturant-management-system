@@ -328,7 +328,7 @@ export const CustomerDashboard = () => {
                       <div>
                         <div style={{ fontSize: '0.88rem', color: '#fff', fontWeight: 600 }}>{it.name}</div>
                         <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-                          {it.quantity}x @ ${it.price.toFixed(2)}
+                          {it.quantity}x @ ₹{it.price.toFixed(2)}
                         </div>
                       </div>
                     </div>
@@ -340,7 +340,7 @@ export const CustomerDashboard = () => {
                     Payment: <strong style={{ color: '#fff' }}>{ord.paymentMethod?.replace('_', ' ').toUpperCase()}</strong> ({ord.paymentStatus})
                   </div>
                   <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff' }}>
-                    Total: <span style={{ color: 'var(--primary-light)' }}>${ord.totalAmount?.toFixed(2)}</span>
+                    Total: <span style={{ color: 'var(--primary-light)' }}>₹{ord.totalAmount?.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

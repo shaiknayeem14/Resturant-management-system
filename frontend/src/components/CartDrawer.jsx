@@ -206,9 +206,9 @@ export const CartDrawer = () => {
                 {progressPercent >= 100 ? (
                   <span style={{ color: '#34d399', fontWeight: 600 }}>🎉 You qualified for Free Delivery!</span>
                 ) : (
-                  <span>Add <strong>${remainingForFreeDelivery}</strong> more for Free Delivery</span>
+                  <span>Add <strong>₹{remainingForFreeDelivery}</strong> more for Free Delivery</span>
                 )}
-                <span>${subtotal.toFixed(2)} / $50</span>
+                <span>₹{subtotal.toFixed(2)} / ₹500</span>
               </div>
               <div style={{ height: '5px', background: 'rgba(255,255,255,0.08)', borderRadius: '999px', overflow: 'hidden' }}>
                 <div style={{ height: '100%', width: `${progressPercent}%`, background: 'var(--gold-gradient)', transition: 'width 0.3s' }} />
@@ -299,7 +299,7 @@ export const CartDrawer = () => {
                         {item.name}
                       </h4>
                       <div style={{ fontSize: '0.85rem', color: 'var(--primary)', fontWeight: 600 }}>
-                        ${item.price.toFixed(2)}
+                        ₹{item.price.toFixed(2)}
                       </div>
                       {item.instructions && (
                         <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontStyle: 'italic', marginTop: '2px' }}>
@@ -399,22 +399,22 @@ export const CartDrawer = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.85rem', marginBottom: '1rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
                 <span>Subtotal</span>
-                <span>${subtotal.toFixed(2)}</span>
+                <span>₹{subtotal.toFixed(2)}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
                 <span>Estimated Tax (8%)</span>
-                <span>${tax.toFixed(2)}</span>
+                <span>₹{tax.toFixed(2)}</span>
               </div>
               {orderType === 'delivery' && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-secondary)' }}>
                   <span>Delivery Fee</span>
-                  <span>{deliveryFee === 0 ? <span style={{ color: '#34d399' }}>Free</span> : `$${deliveryFee.toFixed(2)}`}</span>
+                  <span>{deliveryFee === 0 ? <span style={{ color: '#34d399' }}>Free</span> : `₹${deliveryFee.toFixed(2)}`}</span>
                 </div>
               )}
               {discountAmount > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', color: '#34d399', fontWeight: 600 }}>
                   <span>Promo ({coupon?.code})</span>
-                  <span>-${discountAmount.toFixed(2)}</span>
+                  <span>-₹{discountAmount.toFixed(2)}</span>
                 </div>
               )}
               <div
@@ -430,7 +430,7 @@ export const CartDrawer = () => {
                 }}
               >
                 <span>Total Amount</span>
-                <span style={{ color: 'var(--primary)' }}>${total.toFixed(2)}</span>
+                <span style={{ color: 'var(--primary)' }}>₹{total.toFixed(2)}</span>
               </div>
             </div>
 

@@ -51,7 +51,7 @@ export const Footer = () => {
                     display: 'block',
                   }}
                 >
-                  L'AURA
+                  THE SPICEY HOUSE
                 </span>
                 <span style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'var(--text-secondary)' }}>
                   Haute Cuisine
@@ -153,7 +153,7 @@ export const Footer = () => {
           }}
         >
           <div>
-            © {new Date().getFullYear()} L'Aura Haute Bistro. All rights reserved.
+            © {new Date().getFullYear()} THE SPICEY HOUSE. All rights reserved.
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
             <span>Crafted with passion for culinary excellence</span>

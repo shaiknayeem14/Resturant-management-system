@@ -43,7 +43,7 @@ export const Register = () => {
     setSubmitting(true);
     try {
       const newUser = await register({ name, email, password, phone });
-      success(`Welcome to L'Aura Bistro, ${newUser.name}! JWT token issued.`);
+      success(`Welcome to THE SPICEY HOUSE, ${newUser.name}! JWT token issued.`);
       navigate('/dashboard');
     } catch (err) {
       error(err.message || 'Registration failed. Please verify your details.');
